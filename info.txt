@@ -1,0 +1,5 @@
+DB: https://my.modulus.io/database/T9ogadiw/admin
+HOST: https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up
+
+
+MONGO LAB!

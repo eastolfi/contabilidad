@@ -1,0 +1,67 @@
+<!-- Default Toolbar -->
+<md-data-table-toolbar class="themed" ng-show="!selected.length && !filter.show">
+	<h2 class="md-title">Nutrition</h2>
+  
+	<div flex=""></div>
+	
+	<md-button class="md-icon-button" aria-label="Search" ng-click="filter.show = true">
+		<md-icon><i class="material-icons md-dark">search</i></md-icon>
+	</md-button>
+	
+	<md-button class="md-fab md-mini fab-add" aria-label="Add" ng-click="showAdvanced($event)">
+		<md-icon><i class="material-icons md-dark">add</i></md-icon>
+	</md-button>
+</md-data-table-toolbar>
+
+<!-- Search Toolbar -->
+<md-data-table-toolbar ng-show="filter.show && !selected.length">	
+	<md-icon><i class="material-icons md-dark">search</i></md-icon>
+	<form flex name="filter.form" >
+		<input type="text" ng-model="query.filter" ng-model-options="filter.options" placeholder="search" tabindex="0" aria-invalid="false">
+	</form>
+	
+	<md-button class="md-icon-button" aria-label="Close" ng-click="removeFilter()" tabindex="1">	
+		<md-icon><i class="material-icons md-dark">close</i></md-icon><!-- highlight_off -->
+	</md-button>
+</md-data-table-toolbar>
+
+<!-- Selected Items Toolbar -->
+<md-data-table-toolbar class="alternate" ng-show="selected.length">
+	<div>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</div>
+	
+	<div flex=""></div>
+	
+	<md-button class="md-icon-button" aria-label="Delete" ng-click="delete(selected)"><!-- We're passing selected[] cause there's some sync bug with toggleAll() -->
+		<md-icon><i class="material-icons md-dark">delete</i></md-icon>
+	</md-button>
+</md-data-table-toolbar>
+
+<md-data-table-container>
+  <table md-data-table md-row-select="selected" md-progress="deferred">
+    <thead md-order="query.order" md-trigger="onChange">
+      <tr>
+        <th ng-repeat="column in columns" ng-attr-order-by="{{column.orderBy}}" ng-attr-numeric="{{column.numeric}}" ng-attr-unit="{{column.unit}}" 
+			name="{{column.name}}" ng-attr-descend-first="{{column.descendFirst}}" ng-attr-trim="{{column.trim}}"></th>        
+      </tr>
+    </thead>
+    <tbody><!--md-disable-select="dessert.calories.value > 300" ||| show big only, ej. -->
+      <tr md-auto-select ng-repeat="dessert in desserts.data | orderBy: query.order | limitTo: query.limit : (query.page -1) * query.limit" ng-init="init(this)">
+        <td>{{dessert.date | date:'dd/MM/yyyy'}}</td>
+        <td>{{dessert.concept}}</td>
+        <td>{{dessert.amount}}</td>
+        <td>{{calculateTotal($index)}}</td>
+        <td>
+			<md-button class="md-icon-button" aria-label="Edit" ng-disabled="true">
+				<md-icon><i class="material-icons md-dark">create</i></md-icon>
+			</md-button>
+		</td>
+      </tr>
+    </tbody>
+  </table>
+</md-data-table-container>
+
+<md-data-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{desserts.count}}" md-trigger="onChange"></md-data-table-pagination>
+
+<md-data-table-toolbar >
+  <md-button ng-click="loadStuff()">Trigger Outside Event</md-button>
+</md-data-table-toolbar>

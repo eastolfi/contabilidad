@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="contabilidadApp">
+
+	<head>
+		
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>Nutrition</title>
+		
+		<!-- Font Imports -->
+		<link href="bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+		<link href="bower_components/font-roboto/roboto.html" rel="import" />
+		
+		<!-- Material Design -->
+		<link href="bower_components/iron-icons/iron-icons.html" rel="import" />
+		<link href="bower_components/paper-icon-button/paper-icon-button.html" rel="import" />
+		
+		<!-- Angular Material -->
+		<link href="bower_components/angular-material/angular-material.css" rel="stylesheet" type="text/css" />
+		<link href="bower_components/angular-material-data-table/dist/md-data-table.css" rel="stylesheet" type="text/css" />
+		<link href="bower_components/mdPickers/dist/mdPickers.css" rel="stylesheet" type="text/css" />
+		
+		<!-- Application Styles -->
+		<link href="public/styles/icons.css" rel="stylesheet" type="text/css" />
+		<link href="public/styles/app.css" rel="stylesheet" type="text/css" />
+    
+	</head>
+
+	<body layout="column">
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<div class="md-title">Contabilidad</div>
+			</div>
+		</md-toolbar>
+	
+		<md-content layout="column" >
+			<md-card id="mainCard" ng-include="'public/templates/application-table.tmpl.html'" ng-controller="appTableController">
+		</md-content>
+		
+		<!-- Core Modules -->
+		<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>    
+		<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+		
+		<!-- AngularJS Dependencies -->
+		<script type="text/javascript" src="bower_components/angular-animate/angular-animate.min.js"></script>
+		<script type="text/javascript" src="bower_components/angular-aria/angular-aria.min.js"></script>
+		<script type="text/javascript" src="bower_components/angular-resource/angular-resource.min.js"></script>
+		<script type="text/javascript" src="bower_components/angular-messages/angular-messages.js"></script>
+		
+		<!-- Angular Material Dependencies -->
+		<script type="text/javascript" src="bower_components/angular-material/angular-material.min.js"></script>
+		<script type="text/javascript" src="bower_components/angular-material-data-table/dist/md-data-table.js"></script>
+		<script type="text/javascript" src="bower_components/moment/moment.js"></script>
+		<script type="text/javascript" src="bower_components/mdPickers/dist/mdPickers.js"></script>
+		
+		<!-- Application Scripts -->
+		<script type="text/javascript" src="public/scripts/app.js"></script>
+		<script type="text/javascript" src="public/scripts/appTableController.js"></script>
+		<script type="text/javascript" src="public/scripts/movementResource.js"></script>
+	</body>
+</html>
