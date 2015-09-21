@@ -1,6 +1,6 @@
 <!-- Default Toolbar -->
 <md-data-table-toolbar class="themed" ng-show="!selected.length && !filter.show">
-	<h2 class="md-title">Nutrition</h2>
+	<h2 class="md-title">Movimientos</h2>
   
 	<div flex=""></div>
 	
@@ -8,7 +8,7 @@
 		<md-icon><i class="material-icons md-dark">search</i></md-icon>
 	</md-button>
 	
-	<md-button class="md-fab md-mini fab-add" aria-label="Add" ng-click="showAdvanced($event)">
+	<md-button class="md-fab md-mini fab-add" aria-label="Add" ng-click="showAddItem($event)">
 		<md-icon><i class="material-icons md-dark">add</i></md-icon>
 	</md-button>
 </md-data-table-toolbar>
@@ -17,7 +17,10 @@
 <md-data-table-toolbar ng-show="filter.show && !selected.length">	
 	<md-icon><i class="material-icons md-dark">search</i></md-icon>
 	<form flex name="filter.form" >
-		<input type="text" ng-model="query.filter" ng-model-options="filter.options" placeholder="search" tabindex="0" aria-invalid="false">
+		<md-input-container>
+    	<label>Búsqueda</label>
+      <input type="text" ng-model="query.filter" ng-model-options="filter.options" tabindex="0" aria-invalid="false">
+    </md-input-container>
 	</form>
 	
 	<md-button class="md-icon-button" aria-label="Close" ng-click="removeFilter()" tabindex="1">	
@@ -44,24 +47,23 @@
 			name="{{column.name}}" ng-attr-descend-first="{{column.descendFirst}}" ng-attr-trim="{{column.trim}}"></th>        
       </tr>
     </thead>
-    <tbody><!--md-disable-select="dessert.calories.value > 300" ||| show big only, ej. -->
+    <tbody>
+    	<!--md-disable-select="dessert.calories.value > 300" ||| show big only, ej. -->
+    	<!-- query.order | limitTo: query.limit : (query.page -1) * query.limit -->
       <tr md-auto-select ng-repeat="dessert in desserts.data | orderBy: query.order | limitTo: query.limit : (query.page -1) * query.limit" ng-init="init(this)">
-        <td>{{dessert.date | date:'dd/MM/yyyy'}}</td>
-        <td>{{dessert.concept}}</td>
-        <td>{{dessert.amount}}</td>
-        <td>{{calculateTotal($index)}}</td>
-        <td>
-			<md-button class="md-icon-button" aria-label="Edit" ng-disabled="true">
-				<md-icon><i class="material-icons md-dark">create</i></md-icon>
-			</md-button>
-		</td>
+        <td title="Fecha">{{dessert.date | date:'dd/MM/yyyy'}}</td>
+        <td title="Concepto">{{dessert.concept}}</td>
+        <td title="Cantidad">{{dessert.amount}}</td>
+        <td title="Total">{{calculateTotal($index)}}</td>
+        <td title="Acciones">
+					<md-button class="md-icon-button" aria-label="Edit" ng-click="showEditItem(dessert)">
+						<md-icon><i class="material-icons md-dark">create</i></md-icon>
+					</md-button>
+				</td>
       </tr>
     </tbody>
   </table>
 </md-data-table-container>
 
-<md-data-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{desserts.count}}" md-trigger="onChange"></md-data-table-pagination>
-
-<md-data-table-toolbar >
-  <md-button ng-click="loadStuff()">Trigger Outside Event</md-button>
-</md-data-table-toolbar>
+<md-data-table-pagination md-limit="query.limit" md-page="query.page" 
+	md-total="{{desserts.count}}" md-trigger="onChange"></md-data-table-pagination>

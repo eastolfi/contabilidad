@@ -14,7 +14,7 @@ angular.module('contabilidadApp').controller('appTableController', ['$mdDialog',
 	};
 
 	$scope.query = {
-		order: 'name',
+		order: 'date',
 		limit: 5,
 		page: 1
 	};
@@ -74,12 +74,12 @@ angular.module('contabilidadApp').controller('appTableController', ['$mdDialog',
 		}
 	}
 	
-	$scope.showAdvanced = function(ev, _scope) {
+	$scope.showAddItem = function(ev, _scope) {
 		//$scope.createDialog = $mdDialog;
-		$scope.createDialog = $scope.showAdvanced;
+		$scope.createDialog = $scope.showAddItem;
 		
 		$mdDialog.show({
-			controller: DialogController,
+			controller: AddItemController,
 			templateUrl: 'public/templates/add-item-dialog.tmpl.html',
 			parent: angular.element(document.body),//querySelector('md-card#mainCard')
 			targetEvent: ev,
@@ -103,19 +103,48 @@ angular.module('contabilidadApp').controller('appTableController', ['$mdDialog',
 			}
 		});
 	};
-	function DialogController($scope, $mdDialog, $mdDatePicker, local) {
+	
+	$scope.showEditItem = function(move, _scope) {
+		$scope.editDialog = $scope.showEditItem;
+		
+		$mdDialog.show({
+			controller: EditItemController,
+			templateUrl: 'public/templates/add-item-dialog.tmpl.html',
+			parent: angular.element(document.body),//querySelector('md-card#mainCard')
+			clickOutsideToClose:false,
+			locals: {local: [move, $scope, _scope || null]}
+		})
+		.then(function(result) {
+			if (result.edit === true) {
+				var movimiento = new $movement.movements(result.data);
+				
+				movimiento.$update(function(response) {debugger;
+					getDesserts();
+					
+					$mdToast.show(
+						$mdToast.simple()
+						.content('Movimiento creado.')
+						.position('top right')
+						.hideDelay(3000)
+					);
+				});
+			}
+		});
+	};
+	
+	function AddItemController($scope, $filter, $mdDialog, $mdDatePicker, local) {
 		if (local[2]) {
-			$scope.newMov = local[2].newMov;
+			$scope.move = local[2].move;
 		} else {
-			$scope.newMov = {
+			$scope.move = {
 				date: new Date()
 			};
 		}
 		$scope.dialog = local[1].createDialog;
 		
 		$scope.showPicker = function(ev) {//sc-date-time
-			$mdDatePicker(ev, $scope.newMov.date).then(function(selectedDate) {
-				$scope.newMov.date = selectedDate;
+			$mdDatePicker(ev, $scope.move.date).then(function(selectedDate) {
+				$scope.move.date = selectedDate;
 				$scope.dialog(null, $scope);
 			});
 		};
@@ -136,8 +165,54 @@ angular.module('contabilidadApp').controller('appTableController', ['$mdDialog',
 			$mdDialog.cancel();
 		};
 		$scope.create = function() {
-			$mdDialog.hide({create: true, data: $scope.newMov});
+			$mdDialog.hide({create: true, data: $scope.move});
 		};
+		
+		$scope.$watch('move.date', function(newVal, oldVal) {
+			if (newVal) {
+				$scope.move.date = $filter('date')(newVal, 'dd/MM/yyyy');
+			}
+		});
+	}
+	
+	function EditItemController($scope, $filter, $mdDialog, $mdDatePicker, local) {
+		if (local[2]) {
+			$scope.move = local[2].move;
+		} else {
+			$scope.move = local[0];
+		}
+		$scope.dialog = local[1].editDialog;
+		
+		$scope.showPicker = function(ev) {//sc-date-time
+			$mdDatePicker(ev, $scope.move.date).then(function(selectedDate) {
+				$scope.move.date = selectedDate;
+				$scope.dialog(null, $scope);
+			});
+		};
+		
+		$scope.myDate = new Date();
+		$scope.maxDate = new Date(
+			$scope.myDate.getFullYear(),
+			$scope.myDate.getMonth() + 2,
+			$scope.myDate.getDate()
+		);
+		
+		$scope.hide = function() {
+			$mdDialog.hide({create: false});
+		};
+		$scope.cancel = function() {
+			// Confirm / Save State?
+			$mdDialog.cancel();
+		};
+		$scope.create = function() {
+			$mdDialog.hide({edit: true, data: $scope.move});
+		};
+		
+		$scope.$watch('move.date', function(newVal, oldVal) {
+			if (newVal) {
+				$scope.move.date = $filter('date')(newVal, 'dd/MM/yyyy');
+			}
+		});
 	}
 	
 	$scope.delete = function (_seleted) {

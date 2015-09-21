@@ -17,19 +17,54 @@ module.exports = function(app) {
 
 	// Find All
 	app.get('/movement', function(request, response) {
-		Movimiento.find().sort('-created').exec(function(err, docs) {
+		var where = {};
+		
+		if (request.query.filter) {
+			where = {
+				$or: [
+					{concept: new RegExp(request.query.filter, "i")}, 
+					{$where: "\/" + request.query.filter + "\/.test(this.amount)"}
+				]
+			};
+		}
+		
+		Movimiento.find(where, function(err, docs) {
 			if (err) {
 				console.log('Error:' + err);
 				response.render('error', {
 					status: 500
 				});
-			} else {			
-				var data = {
-					"count": docs.length,
-					"data": docs
-				};
+			} else {
+				response.jsonp({"count": docs.length, "data": docs});
+			}
+		});
+	});
+	
+	// Find All Paginado
+	app.get('/movementPaginado', function(request, response) {
+		var query = request.query;
+		
+		var where = {};
+		if (query.filter) where = JSON.parse(query.filter);
+		
+		Movimiento. find(where)
+		.limit(query.limit)
+		.skip((query.page - 1) * query.limit)
+		.sort(query.order)
+		.exec(function(err, docs) {
+			if (err) {
+				console.log('Error:' + err);
+				response.render('error', {
+					status: 500
+				});
+			} else {
+				var data = docs;
 				
-				response.jsonp(data);
+				Movimiento.count({}, function(err, docs) {
+					if (!err) {
+						response.jsonp({"count": docs, "data": data});
+					}
+				});
 			}
 		});
 	});
@@ -66,23 +101,19 @@ module.exports = function(app) {
 	});
 
 	// Update One
-	app.post('/movement/:id', function(request, response) {
-		/*
-		var monedero = req.monedero;
-
-		monedero = _.extend(monedero, req.body);
-
-		monedero.save(function(err) {
+	app.put('/movement/:id', function(request, response) {
+		var movimiento = new Movimiento(request.body);
+	//DATE
+		movimiento.save(function(err) {
 			if (err) {
-				return res.send('users/signup', {
+				return response.send('users/signup', {
 					errors: err.errors,
-					monedero: monedero
+					monedero: movimiento
 				});
 			} else {
-				res.jsonp(monedero);
+				response.jsonp(movimiento);
 			}
 		});
-		*/
 	});
 	
 	// Delete Several

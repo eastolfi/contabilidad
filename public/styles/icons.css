@@ -13,12 +13,16 @@
   display: inline-block;
   line-height: 1;
   text-transform: none;
+  letter-spacing: normal;
+	text-transform: none;
+	word-wrap: normal;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-feature-settings: 'liga';
           font-feature-settings: 'liga';
 }
+
 .material-icons.md-18 {
   font-size: 18px;
 }

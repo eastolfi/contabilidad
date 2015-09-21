@@ -3,3 +3,12 @@ HOST: https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up
 
 
 MONGO LAB!
+
+
+
+
+
+
+git add .
+$ git commit -am "make it better"
+$ git push heroku master

@@ -15,7 +15,7 @@
 			<md-input-container class="md-icon-float">
 				<label>Concepto</label>
 				<md-icon><i class="material-icons md-dark">insert_comment</i></md-icon>
-				<input ng-model="newMov.concept" name="concept" required md-maxlength="20" maxlength="20">
+				<input ng-model="move.concept" name="concept" required md-maxlength="20" maxlength="20">
 				
 				<div ng-messages="addForm.concept.$error">
 					<div ng-message="required">Introduce un concepto por favor.</div>
@@ -26,7 +26,7 @@
 			<md-input-container class="md-icon-float">
 				<label>Fecha</label>
 				<md-icon><i class="material-icons md-dark">event_note</i></md-icon><!--watch-->
-				<input type="text" ng-model="newMov.date | date:'dd/MM/yyyy'" name="date" required ng-click="showPicker($event)">
+				<input type="text" ng-model="move.date" name="date" required ng-click="showPicker($event)" readonly>
 				
 				<div ng-messages="addForm.date.$error">
 					<div ng-message="required">Introduce una fecha por favor.</div>
@@ -36,7 +36,7 @@
 			<md-input-container class="md-icon-float">
 				<label>Cantidad</label>
 				<md-icon><i class="material-icons md-dark">attach_money</i></md-icon>
-				<input type="number" ng-model="newMov.amount" name="amount" required min="1">
+				<input type="number" ng-model="move.amount" name="amount" required min="1">
 				
 				<div ng-messages="addForm.amount.$error">
 					<div ng-message="required">Introduce una cantidad por favor.</div>

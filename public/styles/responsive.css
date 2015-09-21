@@ -1,0 +1,87 @@
+table, thead, tbody, th, td, tr { 
+    display: block; 
+}
+/* Hide table headers (but not display: none;, for accessibility) */
+thead tr { 
+	position: absolute;
+	top: -9999px;
+	left: -9999px;
+}
+
+table[md-data-table] > tbody > tr {
+    border: 1px solid #ccc;
+    
+    height: 140px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+table[md-data-table][md-row-select] > thead:not([md-table-progress]) > tr > th:nth-child(2), 
+table[md-data-table][md-row-select] > tbody > tr > td:nth-child(2), 
+table[md-data-table][md-row-select] > tfoot > tr > td:nth-child(2),
+table[md-data-table][md-row-select] > thead:not([md-table-progress]) > tr > th:nth-child(n+3):nth-last-child(n+2),
+table[md-data-table][md-row-select] > tbody > tr > td:nth-child(n+3):nth-last-child(n+2),
+table[md-data-table][md-row-select] > tfoot > tr > td:nth-child(n+3):nth-last-child(n+2),
+table[md-data-table] > thead:not([md-table-progress]) > tr > th:last-child,
+table[md-data-table] > tbody > tr > td:last-child,
+table[md-data-table] > tfoot > tr > td:last-child {
+    
+    padding-left: 40%;
+}
+
+table[md-data-table] > tbody > tr > td { 
+	/* Behave  like a "row" */
+	border: none;
+	border-bottom: 1px solid #eee; 
+	position: relative;
+	padding-left: 50%; 
+	
+	
+	font-size: 18px;
+    
+}
+table[md-data-table] > tbody > tr > td,
+table[md-data-table] > tbody > tr > td.numeric {
+    text-align: center;
+}
+
+table[md-data-table] > tbody > tr > td:first-child { 
+	position: absolute;
+	top: -9999px;
+	left: -9999px;
+}
+
+td:before { 
+    content: attr(title);
+    
+	position: absolute;
+	left: 6px;
+	color: #8C8280;
+	
+	/*
+	top: 6px;
+	
+	width: 45%; 
+	padding-right: 10px; 
+	white-space: nowrap;
+	*/
+	
+}
+
+td:last-child:before {
+    top: 12px;
+}
+
+table[md-data-table] > tbody > tr.md-selected {
+    box-shadow: 0 8px 3px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.24);
+}
+
+md-data-table-pagination > div {
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    justify-content: center;
+}
+
+.fab-add {
+    position: inherit;
+}
