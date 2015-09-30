@@ -2,7 +2,7 @@
 	<form name="addForm">
 		<md-toolbar>
 			<div class="md-toolbar-tools">
-				<h2>Añadir Gasto</h2>
+				<h2>{{title}}</h2>
 				<span flex></span>
 				
 				<md-button class="md-icon-button" ng-click="cancel()">
@@ -25,8 +25,8 @@
 			
 			<md-input-container class="md-icon-float">
 				<label>Fecha</label>
-				<md-icon><i class="material-icons md-dark">event_note</i></md-icon><!--watch-->
-				<input type="text" ng-model="move.date" name="date" required ng-click="showPicker($event)" readonly>
+				<md-icon><i class="material-icons md-dark">event_note</i></md-icon>
+				<input type="text" ng-model="localDate" name="date" required ng-click="showPicker($event)" readonly>
 				
 				<div ng-messages="addForm.date.$error">
 					<div ng-message="required">Introduce una fecha por favor.</div>

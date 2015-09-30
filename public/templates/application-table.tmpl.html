@@ -8,7 +8,7 @@
 		<md-icon><i class="material-icons md-dark">search</i></md-icon>
 	</md-button>
 	
-	<md-button class="md-fab md-mini fab-add" aria-label="Add" ng-click="showAddItem($event)">
+	<md-button class="md-fab md-mini fab-add" aria-label="Add" ng-click="showItemDialog()">
 		<md-icon><i class="material-icons md-dark">add</i></md-icon>
 	</md-button>
 </md-data-table-toolbar>
@@ -56,7 +56,7 @@
         <td title="Cantidad">{{dessert.amount}}</td>
         <td title="Total">{{calculateTotal($index)}}</td>
         <td title="Acciones">
-					<md-button class="md-icon-button" aria-label="Edit" ng-click="showEditItem(dessert)">
+					<md-button class="md-icon-button" aria-label="Edit" ng-click="showItemDialog(dessert)">
 						<md-icon><i class="material-icons md-dark">create</i></md-icon>
 					</md-button>
 				</td>

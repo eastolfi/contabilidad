@@ -102,18 +102,33 @@ module.exports = function(app) {
 
 	// Update One
 	app.put('/movement/:id', function(request, response) {
-		var movimiento = new Movimiento(request.body);
-	//DATE
-		movimiento.save(function(err) {
+		var concept = request.body.concept;
+		var date = request.body.date;
+		var amount = request.body.amount;
+		
+		Movimiento.findById(request.body._id, function (err, movimiento) {
 			if (err) {
 				return response.send('users/signup', {
 					errors: err.errors,
 					monedero: movimiento
 				});
 			} else {
-				response.jsonp(movimiento);
+				movimiento.concept = concept;
+				movimiento.date = date;
+				movimiento.amount = amount;
+				
+				movimiento.save(function(err) {
+					if (err) {
+						return response.send('users/signup', {
+							errors: err.errors,
+							monedero: movimiento
+						});
+					} else {
+						response.jsonp(movimiento);
+					}
+				});
 			}
-		});
+		})
 	});
 	
 	// Delete Several
