@@ -70,6 +70,10 @@ angular.module('contabilidadApp').controller('appTableController',
 	function success(desserts) {
 		$scope.desserts = desserts;
 		
+		if (desserts.count <= ($scope.query.limit * ($scope.query.page - 1))) {
+			$scope.query.page -= 1;
+		}
+		
 		_amounts = [];
 		var _data = $scope.filterOrderBy(desserts.data, $scope.query.order);
 		var _init = $scope.query.limit * ($scope.query.page - 1);
