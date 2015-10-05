@@ -14,12 +14,7 @@ var express = require('express'),
 // Set the node environment variable if not set before
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-// DB Connection
-if (process.env.NODE_ENV === 'development') {
-	mongoose.connect('mongodb://localhost/contabilidad');
-} else if (process.env.NODE_ENV === 'production') {
-	mongoose.connect('mongodb://admin:admin@ds049161.mongolab.com:49161/contabilidad');
-}
+process.env.DDBB_TYPE = process.env.DDBB_TYPE || 'postgreSQL';
 
 // DB Model
 require(__dirname + '/app/movimiento.js');
