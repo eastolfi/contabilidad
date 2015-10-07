@@ -63,7 +63,7 @@ module.exports = function(app) {
 
 	// Create One
 	app.post('/movement', function(request, response) {
-        ddbbHandler.insert(request.body, function(err, doc) {
+        ddbbHandler.create(request.body, function(err, doc) {
             if (err) {
                 return res.send('users/signup', {
                     errors: err.errors,
@@ -92,10 +92,6 @@ module.exports = function(app) {
 
 	// Update One
 	app.put('/movement/:id', function(request, response) {
-		var concept = request.body.concept;
-		var date = request.body.date;
-		var amount = request.body.amount;
-
 		ddbbHandler.update(request.body, function(err, doc) {
             if (err) {
                 return res.send('users/signup', {

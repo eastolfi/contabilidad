@@ -46,8 +46,8 @@ module.exports = function(config) {
         },
         update: function(item, cb) {
             var query = ' UPDATE movimientos SET ';
-            query += 'date = \'' + item.date + '\', concept = `\'' + item.concept + '\', amount = ' + item.amount;
-            query += ' WHERE 1=1 AND id = ' + item._id + ';';
+            query += 'date = \'' + item.date + '\', concept = \'' + item.concept + '\', amount = ' + item.amount;
+            query += ' WHERE 1=1 AND _id = ' + item._id + ';';
 
             pg.connect(config.getConnectionString(), function(err, client, done) {
                 if (err) cb(err);
@@ -64,10 +64,19 @@ module.exports = function(config) {
             var moves = [];
 
             if (!_.isArray(items)) {
-                moves.push(JSON.parse(items));
+                if (_.isString(items)) {
+                    moves.push(JSON.parse(items));
+                } else {
+                    moves.push(items);
+                }
             } else {
                 for (var i = 0; i < items.length; i++) {
-                    moves.push(JSON.parse(items[i]));
+                    var item = items[i];
+                    if (_.isString(item)) {
+                        moves.push(JSON.parse(item));
+                    } else {
+                        moves.push(item);
+                    }
                 }
             }
 
@@ -79,7 +88,7 @@ module.exports = function(config) {
                 if (index < ids.lenght - 1) _in += ', ';
             });
             _in += ' ) ';
-            var query = ' DELETE FROM movimientos WHERE 1=1 AND id IN ' + _in + ';';
+            var query = ' DELETE FROM movimientos WHERE 1=1 AND _id IN ' + _in + ';';
             pg.connect(config.getConnectionString(), function(err, client, done) {
                 if (err) cb(err);
 

@@ -62,28 +62,36 @@ describe('Postgre SQL', function() {
         });
         describe('Update', function() {
             it('should be able to update one', function(done) {
-                var item = {
-                    id: 10,
-                    date: '2000-12-31',
-                    concept: 'mocha_update',
-                    amount: 100
-                };
-                handler.update(item, function(error, result) {
-                    expect(error).to.be.null;
-                    expect(result).to.not.be.null;
+                handler.search('mocha', function(err, res) {
+                    expect(err).to.be.null;
+                    expect(res).to.have.length(1);
 
-                    done();
+                    var item = res[0];
+                    item.date = '2000-12-31';
+                    item.concept = 'mocha_update';
+                    item.amount = 100;
+
+                    handler.update(item, function(error, result) {
+                        expect(error).to.be.null;
+                        expect(result).to.not.be.null;
+
+                        done();
+                    });
                 });
             });
         });
         describe('Delete', function() {
             it('should be able to delete one', function(done) {
-                var moves = ['{"_id": 12}'];
-                handler.delete(moves, function(error, result) {
-                    expect(error).to.be.null;
-                    expect(result).to.not.be.null;
+                handler.search('mocha', function(err, res) {
+                    expect(err).to.be.null;
+                    expect(res).to.have.length(1);
 
-                    done();
+                    handler.delete(res, function(error, result) {
+                        expect(error).to.be.null;
+                        expect(result).to.not.be.null;
+
+                        done();
+                    });
                 });
             });
         });

@@ -17,7 +17,7 @@ module.exports = function(config) {
                 postgreHandler.create(item, cb);
             }
         },
-        update: function(item, cb) {
+        update: function(item, cb) {console.log(config.handler);
             if (config.handler.isMongoDB) {
                 mongoHandler.search(item, cb);
             } else if (config.handler.isPostgreSQL) {
