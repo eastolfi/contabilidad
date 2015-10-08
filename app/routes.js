@@ -3,8 +3,8 @@
 /**
  * Module dependencies.
  */
-var mongoose = require('mongoose'),
-    Movimiento = mongoose.model('Movimiento'),
+var dbConfig = require('./ddbb/ddbbConfig')();
+var ddbbHandler = require('./ddbb/ddbbHandler.js')(dbConfig),
 	path = require('path'),
     _ = require('lodash');
 
@@ -17,30 +17,21 @@ module.exports = function(app) {
 
 	// Find All
 	app.get('/movement', function(request, response) {
-		var where = {};
-		
-		if (request.query.filter) {
-			where = {
-				$or: [
-					{concept: new RegExp(request.query.filter, "i")}, 
-					{$where: "\/" + request.query.filter + "\/.test(this.amount)"}
-				]
-			};
-		}
-		
-		Movimiento.find(where, function(err, docs) {
-			if (err) {
-				console.log('Error:' + err);
-				response.render('error', {
-					status: 500
-				});
-			} else {
-				response.jsonp({"count": docs.length, "data": docs});
-			}
-		});
+        // Setup filter
+        var filter = request.query.filter;
+
+        ddbbHandler.search(filter, function(err, docs) {
+            if (err) {
+                console.error(err);
+                response.render('error', {status: 500});
+            } else {
+                response.jsonp({"count": docs.length, "data": docs});
+            }
+        });
 	});
 	
 	// Find All Paginado
+    /*
 	app.get('/movementPaginado', function(request, response) {
 		var query = request.query;
 		
@@ -68,21 +59,20 @@ module.exports = function(app) {
 			}
 		});
 	});
+	*/
 
 	// Create One
-	app.post('/movement', function(req, res) {
-		var newMove = new Movimiento(req.body);
-		
-		newMove.save(function(err) {
-			if (err) {
-				return res.send('users/signup', {
-					errors: err.errors,
-					movimiento: newMove
-				});
-			} else {
-				res.jsonp(newMove);
-			}
-		});
+	app.post('/movement', function(request, response) {
+        ddbbHandler.create(request.body, function(err, doc) {
+            if (err) {
+                return res.send('users/signup', {
+                    errors: err.errors,
+                    movimiento: doc
+                });
+            } else {
+                response.jsonp(doc);
+            }
+        });
 	});
 
 	// Find One
@@ -102,56 +92,31 @@ module.exports = function(app) {
 
 	// Update One
 	app.put('/movement/:id', function(request, response) {
-		var concept = request.body.concept;
-		var date = request.body.date;
-		var amount = request.body.amount;
-		
-		Movimiento.findById(request.body._id, function (err, movimiento) {
-			if (err) {
-				return response.send('users/signup', {
-					errors: err.errors,
-					monedero: movimiento
-				});
-			} else {
-				movimiento.concept = concept;
-				movimiento.date = date;
-				movimiento.amount = amount;
-				
-				movimiento.save(function(err) {
-					if (err) {
-						return response.send('users/signup', {
-							errors: err.errors,
-							monedero: movimiento
-						});
-					} else {
-						response.jsonp(movimiento);
-					}
-				});
-			}
-		})
+		ddbbHandler.update(request.body, function(err, doc) {
+            if (err) {
+                return res.send('users/signup', {
+                    errors: err.errors,
+                    movimiento: doc
+                });
+            } else {
+                response.jsonp(doc);
+            }
+        });
 	});
 	
 	// Delete Several
 	app.delete('/movement', function(request, response) {
-		var items = [];
-				
-		if (!_.isArray(request.query.moves)) {
-			items.push(JSON.parse(request.query.moves));
-		} else {
-			for (var i = 0; i < request.query.moves.length; i++) {
-				items.push(JSON.parse(request.query.moves[i]));
-			}
-		}
-		
-		var ids = _.pluck(items, '_id');
-		Movimiento.remove({ "_id": {$in: ids} }, function(err) {
-			if (err) {
-				response.send({done: false});
-			} else {
-				response.send({done: true});
-			}
-		});
-		
+        ddbbHandler.delete(request.query.moves, function(err, docs) {
+            if (err) {
+                return response.send('users/signup', {
+                    errors: err.errors,
+                    movimientos: docs
+                });
+            } else {
+                response.jsonp(docs);
+            }
+        });
+
 		
 		
 		/*

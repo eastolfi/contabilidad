@@ -75,11 +75,13 @@ angular.module('contabilidadApp').controller('appTableController',
 		}
 		
 		_amounts = [];
-		var _data = $scope.filterOrderBy(desserts.data, $scope.query.order);
-		var _init = $scope.query.limit * ($scope.query.page - 1);
-		for (var i = _init; i < _data.length; i++) {
-			_amounts.push(_data[i].amount);
-		}
+        if ($scope.query.page > 0) {
+            var _data = $scope.filterOrderBy(desserts.data, $scope.query.order);
+            var _init = $scope.query.limit * ($scope.query.page - 1);
+            for (var i = _init; i < _data.length; i++) {
+                _amounts.push(_data[i].amount);
+            }
+        }
 	}
 	
 	$scope.showItemDialog = function(_item, _scope) {
