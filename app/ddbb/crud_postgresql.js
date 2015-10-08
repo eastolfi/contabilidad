@@ -85,7 +85,7 @@ module.exports = function(config) {
             var _in = ' ( ';
             ids.forEach(function(item, index) {
                 _in += item.toString();
-                if (index < ids.lenght - 1) _in += ', ';
+                if (index < ids.length - 1) _in += ', ';
             });
             _in += ' ) ';
             var query = ' DELETE FROM movimientos WHERE 1=1 AND _id IN ' + _in + ';';

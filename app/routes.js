@@ -115,7 +115,7 @@ module.exports = function(app) {
             } else {
                 response.jsonp(docs);
             }
-        })
+        });
 
 		
 		

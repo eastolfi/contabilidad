@@ -18,7 +18,13 @@ module.exports = function() {
                     str = 'postgres://postgres:admin@localhost:5432/contabilidad';
                 }
                 if (this.isPostgreSQL && process.env.NODE_ENV === 'production') {
-                    //str = 'postgres://postgres:admin@localhost:5432/contabilidad';
+                    var _host = 'ec2-54-247-170-228.eu-west-1.compute.amazonaws.com';
+                    var _port = '5432';
+                    var _db = 'd1fhnj5hqlljv3';
+                    var _credentials = 'kjfzksezxibswp:xBUoEJ2RNDJLCZZa8OhU1-Sqff'
+                    var _ssl = 'ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory';
+                    
+                    str = 'postgres://' + _credentials + '@' + _host + ':' + _port + '/' + _db + '?' + _ssl;
                 }
 
                 return str;

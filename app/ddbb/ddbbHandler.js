@@ -17,18 +17,18 @@ module.exports = function(config) {
                 postgreHandler.create(item, cb);
             }
         },
-        update: function(item, cb) {console.log(config.handler);
+        update: function(item, cb) {
             if (config.handler.isMongoDB) {
-                mongoHandler.search(item, cb);
+                mongoHandler.update(item, cb);
             } else if (config.handler.isPostgreSQL) {
-                postgreHandler.search(item, cb);
+                postgreHandler.update(item, cb);
             }
         },
         delete: function(items, cb) {
             if (config.handler.isMongoDB) {
-                mongoHandler.search(items, cb);
+                mongoHandler.delete(items, cb);
             } else if (config.handler.isPostgreSQL) {
-                postgreHandler.search(items, cb);
+                postgreHandler.delete(items, cb);
             }
         }
     };
