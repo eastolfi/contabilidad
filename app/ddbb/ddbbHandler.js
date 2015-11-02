@@ -30,6 +30,13 @@ module.exports = function(config) {
             } else if (config.handler.isPostgreSQL) {
                 postgreHandler.delete(items, cb);
             }
+        },
+        export: function(items, cb) {
+            if (config.handler.isMongoDB) {
+                mongoHandler.export(items, cb);
+            } else if (config.handler.isPostgreSQL) {
+                postgreHandler.export(items, cb);
+            }
         }
     };
 };

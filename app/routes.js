@@ -146,4 +146,17 @@ module.exports = function(app) {
 		});*/
 		
 	});
+	
+	app.get('/getExport', function(request, response) {
+	    ddbbHandler.export(request.query, function(err, docs) {
+            if (err) {
+                return response.send('users/signup', {
+                    errors: err.errors,
+                    movimientos: docs
+                });
+            } else {
+                response.jsonp(docs);
+            }
+        });
+	});
 };

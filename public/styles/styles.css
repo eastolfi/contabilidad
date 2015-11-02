@@ -23,8 +23,31 @@ md-data-table-toolbar.alternate {
     background-color: #e3f2fd;
 }
 
+md-data-table-toolbar.md-medium-tall {
+    height: 88px;
+    min-height: 88px;
+    max-height: 88px;
+}
+md-data-table-toolbar.md-tall {
+    height: 128px;
+    min-height: 128px;
+    max-height: 128px;
+}
+
 .fab-add {
 	position: absolute;
-	top: 45px;
+	top: 68px;
 	right: 80px;
+}
+
+.type-select {
+    margin-left: 35px;
+    margin-top: 15px;
+    width: 85%;
+}
+
+md-input-container label.no-order {
+    -webkit-order: 1;
+    -ms-flex-order: 1;
+    order: 0;
 }

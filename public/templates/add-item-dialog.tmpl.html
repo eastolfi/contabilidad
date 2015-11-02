@@ -43,6 +43,14 @@
 					<div ng-message="min">El importe no puede ser menor de 1€.</div>
 				</div>
 			</md-input-container>
+			
+			<md-input-container class="md-icon-float">
+				<label>Tipo</label>
+				<md-icon><i class="material-icons md-dark">attach_money</i></md-icon>
+				<md-select ng-model="move.type" class="type-select">
+					<md-option ng-repeat="item in move_type" value="{{item}}">{{item}}</md-option>
+				</md-select>
+			</md-input-container>
 		</md-dialog-content>
 		
 		<div class="md-actions" layout="row">			
