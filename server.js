@@ -29,8 +29,8 @@ app.use('/bower_components', express.static(__dirname + '/bower_components'));
 app.use(favicon(__dirname + '/favicon.ico'));
 
 // Request body parsing middleware should be above methodOverride
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(methodOverride());
 
 // Application Routes
