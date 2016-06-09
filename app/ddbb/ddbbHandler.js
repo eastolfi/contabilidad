@@ -2,9 +2,11 @@ module.exports = function(config) {
     var handler = null;
     
     if (config.handler.isMongoDB) {
-        handler = require('./crud_mongodb')(config.handler)
+        handler = require('./crud_mongodb')(config.handler);
     } else if (config.handler.isPostgreSQL) {
-        handler = require('./crud_postgresql')(config.handler)
+        handler = require('./crud_postgresql')(config.handler);
+    } else if (config.handler.isMongoPortable) {
+        handler = require('./crud_mongo_portable')(config.handler);
     }
     // var mongoHandler = require('./crud_mongodb')(config.handler),
     //     postgreHandler = require('./crud_postgresql')(config.handler);

@@ -14,7 +14,7 @@ var express = require('express'),
 // Set the node environment variable if not set before
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-process.env.DDBB_TYPE = process.env.DDBB_TYPE || 'postgreSQL';
+process.env.DDBB_TYPE = process.env.DDBB_TYPE || 'mongoPortable';
 
 // DB Model
 require(__dirname + '/app/movimiento.js');

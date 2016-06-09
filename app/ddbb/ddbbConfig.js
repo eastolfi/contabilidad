@@ -8,6 +8,7 @@ module.exports = function() {
         handler: {
             isMongoDB: ddbbType === 'mongoDB',
             isPostgreSQL: ddbbType === 'postgreSQL',
+            isMongoPortable: ddbbType === 'mongoPortable',
             getConnectionString: function() {
                 var str = '';
 
@@ -23,7 +24,7 @@ module.exports = function() {
                     var _db = 'dahrh9sqddtae';  //d1fhnj5hqlljv3
                     var _credentials = 'uvbvqpqbfynwux:_WmUaQKnLeCiwN75gsaXF1au5o';     //kjfzksezxibswp:xBUoEJ2RNDJLCZZa8OhU1-Sqff
                     var _ssl = 'ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory';
-                    
+
                     str = 'postgres://' + _credentials + '@' + _host + ':' + _port + '/' + _db + '?' + _ssl;
                 }
                 if (this.isPostgreSQL && nodeEnv === 'production') {
@@ -32,7 +33,7 @@ module.exports = function() {
                     var _db = 'dahrh9sqddtae';  //d1fhnj5hqlljv3
                     var _credentials = 'uvbvqpqbfynwux:_WmUaQKnLeCiwN75gsaXF1au5o';     //kjfzksezxibswp:xBUoEJ2RNDJLCZZa8OhU1-Sqff
                     var _ssl = 'ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory';
-                    
+
                     str = 'postgres://' + _credentials + '@' + _host + ':' + _port + '/' + _db + '?' + _ssl;
                 }
 
