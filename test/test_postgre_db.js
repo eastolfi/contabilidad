@@ -1,25 +1,25 @@
-var config = {
-    getConnectionString: function() {
-        return 'postgres://postgres:admin@localhost:5432/contabilidad';
-    }
-};
-
-var _id = 13;
+var config = require('../app/ddbb/ddbbConfig')();
 
 var expect = require('chai').expect,
     pg = require('pg'),
-    handler = require('../app/ddbb/crud_postgresql')(config);
-
+    handler = require('../app/ddbb/ddbbHandler.js')(config);
+    
+    
+var filter = '{\"concept\": \"mocha\"}';
 describe('Postgre SQL', function() {
     describe('Configuration', function() {
         it('should have the PG module', function() {
             expect(pg).to.not.be.null;
         });
+        it('should have the config file', function() {
+            expect(config).to.not.be.null;
+            expect(config.handler).to.not.be.null;
+        });
         it('should have the PostgreSQL Handler', function() {
             expect(handler).to.not.be.null;
         });
         it('should have a valid connection string', function() {
-            expect(config.getConnectionString()).to.have.length.above(0);
+            expect(config.handler.getConnectionString()).to.have.length.above(0);
         });
     });
 
@@ -50,7 +50,6 @@ describe('Postgre SQL', function() {
                 });
             });
             it('should be able to query one', function(done) {
-                var filter = 'mocha';
                 handler.search(filter, function(error, result) {
                     expect(error).to.be.null;
                     expect(result).to.not.be.null;
@@ -62,7 +61,7 @@ describe('Postgre SQL', function() {
         });
         describe('Update', function() {
             it('should be able to update one', function(done) {
-                handler.search('mocha', function(err, res) {
+                handler.search(filter, function(err, res) {
                     expect(err).to.be.null;
                     expect(res).to.have.length(1);
 
@@ -82,7 +81,7 @@ describe('Postgre SQL', function() {
         });
         describe('Delete', function() {
             it('should be able to delete one', function(done) {
-                handler.search('mocha', function(err, res) {
+                handler.search(filter, function(err, res) {
                     expect(err).to.be.null;
                     expect(res).to.have.length(1);
 
@@ -92,6 +91,17 @@ describe('Postgre SQL', function() {
 
                         done();
                     });
+                });
+            });
+        });
+        describe('Execute', function() {
+            it('should be able to execute a query', function(done) {
+                var query = 'SELECT * FROM movimientos LIMIT 1';
+                handler.execute(query, function(err, res) {
+                    expect(err).to.be.null;
+                    expect(res).to.have.length(1);
+                    
+                    done();
                 });
             });
         });

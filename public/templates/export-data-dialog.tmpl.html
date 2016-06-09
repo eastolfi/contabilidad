@@ -12,23 +12,41 @@
 		</md-toolbar>
 		
 		<md-dialog-content><!--style="max-width:800px;max-height:810px; "-->
-			<md-input-container class="md-icon-float">
-				<label>Registros</label>
-				<md-icon><i class="material-icons md-dark">attach_money</i></md-icon>
-				<input type="number" ng-model="export.registros" name="registros" required min="1">
+			<!--<md-input-container class="md-icon-float">-->
+			<!--	<label>Registros</label>-->
+			<!--	<md-icon><i class="material-icons md-dark">attach_money</i></md-icon>-->
+			<!--	<input type="number" ng-model="export.registros" name="registros" required min="1">-->
 				
-				<div ng-messages="addForm.registros.$error">
-					<div ng-message="required">Introduce el número de registros por favor.</div>
-					<div ng-message="min">El número de registros no puede ser menor de 1.</div>
-				</div>
+			<!--	<div ng-messages="addForm.registros.$error">-->
+			<!--		<div ng-message="required">Introduce el número de registros por favor.</div>-->
+			<!--		<div ng-message="min">El número de registros no puede ser menor de 1.</div>-->
+			<!--	</div>-->
+			<!--</md-input-container>-->
+			
+			<!--<md-input-container class="md-icon-float">-->
+			<!--	<label>Tipo de Gasto</label>-->
+			<!--	<md-icon><i class="material-icons md-dark">attach_money</i></md-icon>-->
+			<!--	<md-select ng-model="export.type" class="type-select" required multiple>-->
+			<!--		<md-option value="all">Todos</md-option>-->
+			<!--		<md-option ng-repeat="item in move_types" value="{{item}}">{{item}}</md-option>-->
+			<!--	</md-select>-->
+			<!--</md-input-container>-->
+			
+			<md-input-container class="md-icon-float">
+				<label>Mes</label>
+				<md-icon><i class="material-icons md-dark">today</i></md-icon>
+				<md-select ng-model="export.month" class="type-select" required>
+					<md-option value="all">Todos</md-option>
+					<md-option ng-repeat="item in months" value="{{$index+1}}">{{item}}</md-option>
+				</md-select>
 			</md-input-container>
 			
 			<md-input-container class="md-icon-float">
-				<label>Tipo de Gasto</label>
-				<md-icon><i class="material-icons md-dark">attach_money</i></md-icon>
-				<md-select ng-model="export.type" class="type-select" required multiple>
+				<label>Año</label>
+				<md-icon><i class="material-icons md-dark">today</i></md-icon>
+				<md-select ng-model="export.year" class="type-select" required>
 					<md-option value="all">Todos</md-option>
-					<md-option ng-repeat="item in move_types" value="{{item}}">{{item}}</md-option>
+					<md-option ng-repeat="item in years" value="{{item}}">{{item}}</md-option>
 				</md-select>
 			</md-input-container>
 		</md-dialog-content>

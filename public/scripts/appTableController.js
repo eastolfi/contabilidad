@@ -5,6 +5,10 @@ angular.module('contabilidadApp').controller('appTableController',
 	['$mdDialog', '$mdToast', '$mdDatePicker', '$movement', '$scope', '$q', '$timeout', '$filter', '$http',
 	function ($mdDialog, $mdToast, $mdDatePicker, $movement, $scope, $q, $timeout, $filter, $http) {
 	
+	var months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+	$scope.months = months;
+	var minYear = 2015, maxYear = 2016;
+	
 	var bookmark;
   
 	$scope.selected = [];
@@ -213,15 +217,23 @@ angular.module('contabilidadApp').controller('appTableController',
 		var _success = function(result) {
 			if (result.done === true) {
 				var _export = result.data;
-				$http({
-					method: 'GET',
-					url: '/getExport',
-					params: _export
-				}).then(function successCallback(response) {
-					$scope.totalExport = response.data;
-				}, function errorCallback(response) {
-					console.log(response);
-				});
+				var win = window.open('pdfExport/' + _export.month + '/' + _export.year, '_blank');
+				if(win){
+				    //Browser has allowed it to be opened
+				    win.focus();
+				}else{
+				    //Broswer has blocked it
+				    alert('Please allow popups for this site');
+				}
+				// $http({
+				// 	method: 'GET',
+				// 	url: '/getExport',
+				// 	params: _export
+				// }).then(function successCallback(response) {
+				// 	$scope.totalExport = response.data;
+				// }, function errorCallback(response) {
+				// 	console.log(response);
+				// });
 			}
 		};
 		
@@ -236,6 +248,10 @@ angular.module('contabilidadApp').controller('appTableController',
 	
 	function ExportDataController($scope, $mdDialog) {
 		$scope.move_types = move_types;
+		$scope.months = months;
+		$scope.years = [];
+		for (var i = minYear; i <= maxYear; i++) { $scope.years.push(i); }
+		
 		$scope.export = {
 			registros: 5
 		};

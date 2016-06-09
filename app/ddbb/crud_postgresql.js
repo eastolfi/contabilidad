@@ -171,6 +171,24 @@ module.exports = function(config) {
                     cb(null, docs);
                 });
             });
+        },
+        
+        execute: function(query, cb) {
+            var docs = [];
+            pg.connect(config.getConnectionString(), function(err, client, done) {
+                if (err) cb(err);
+
+                var res = client.query(query);
+
+                res.on('row', function(row) {
+                    docs.push(row);
+                });
+
+                res.on('end', function() {
+                    client.end();
+                    cb(null, docs);
+                });
+            });
         }
     };
 };

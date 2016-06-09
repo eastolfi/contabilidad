@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node_modules/mocha/bin/mocha test",
     "start": "node server.js",
     "postinstall": "bash ./post_install.sh"
   },
@@ -13,16 +13,22 @@
   "dependencies": {
     "body-parser": "1.13.3",
     "bower": "1.5.2",
+    "commander": "^2.9.0",
     "express": "4.13.3",
+    "handlebars": "^4.0.5",
+    "html-entities": "^1.2.0",
+    "jsreport": "^0.10.0",
     "lodash": "2.4.1",
     "method-override": "2.3.5",
+    "moment": "^2.10.6",
     "mongoose": "3.8.12",
+    "node.extend": "^1.1.5",
+    "pg": "4.4.2",
     "serve-favicon": "2.3.0",
-    "pg": "4.4.2"
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "chai": "^3.3.0",
-    "chi": "0.0.10",
     "mocha": "^2.3.3"
   }
 }
