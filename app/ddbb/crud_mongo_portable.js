@@ -8,90 +8,158 @@ module.exports = function(config) {
     var MOVIMIENTOS_COLLECTION = "movimientos";
     var db = new MongoPortable("contabilidad-ddbb");
     db.addStore(new FileSystemStore({
-        ddbb_path: "database"
+        ddbb_path: "database",
+        sync: true
     }));
 
     return {
-        search: function(filter, cb) {
+        search: function(filter, callback) {
             var collection = db.collection(MOVIMIENTOS_COLLECTION);
 
             var where = {};
 
             if (filter) {
-                where = {
-                    $or: [
-                        {concept: new RegExp(filter, "i")},
-                        {$where: "\/" + filter + "\/.test(this.amount)"}
-                    ]
-                };
-            }
-
-            var cursor = collection.find(where);
-            var docs = cursor.fetch();
-
-            cb(docs);
-        },
-        create: function() {
-            /*
-             var newMove = new Movimiento(req.body);
-
-             newMove.save(function(err) {
-
-             });
-             */
-        },
-        update: function() {
-            /*
-             var concept = request.body.concept;
-             var date = request.body.date;
-             var amount = request.body.amount;
-
-            Movimiento.findById(request.body._id, function (err, movimiento) {
-                if (err) {
-                    return response.send('users/signup', {
-                        errors: err.errors,
-                        monedero: movimiento
-                    });
-                } else {
-                    movimiento.concept = concept;
-                    movimiento.date = date;
-                    movimiento.amount = amount;
-
-                    movimiento.save(function(err) {
-                        if (err) {
-                            return response.send('users/signup', {
-                                errors: err.errors,
-                                monedero: movimiento
-                            });
-                        } else {
-                            response.jsonp(movimiento);
+                var f = JSON.parse(filter);
+                var or = [];
+                
+                if (f.date && f.date != '') {
+                    or.push({
+                        date: {
+                            $gte: f.date
                         }
                     });
                 }
-            })
-            */
-        },
-        delete: function() {
-            /*
-            var items = [];
-
-            if (!_.isArray(request.query.moves)) {
-                items.push(JSON.parse(request.query.moves));
-            } else {
-                for (var i = 0; i < request.query.moves.length; i++) {
-                    items.push(JSON.parse(request.query.moves[i]));
+                
+                if (f.concept && f.concept != '') {
+                    or.push({
+                        concept: {
+                            $regex: f.concept,
+                            $options: 'ig'
+                        }
+                    });
+                }
+                
+                if (f.amount && f.amount > 0) {
+                    or.push({
+                        amount: {
+                            $gte: f.amount
+                        }
+                    });
+                }
+                
+                if (f.types && f.types.length > 0) {
+                    or.push({
+                        type: {
+                            $in: f.types
+                        }
+                    });
+                }
+                
+                if (or.length > 0) {
+                    where = {
+                        $or: or
+                    };
                 }
             }
 
-            var ids = _.pluck(items, '_id');
-            Movimiento.remove({ "_id": {$in: ids} }, function(err) {
-                if (err) {
-                    response.send({done: false});
+            collection.find(where, callback);
+        },
+        
+        create: function(data, callback) {
+            var collection = db.collection(MOVIMIENTOS_COLLECTION);
+            
+            collection.insert(data, callback);  // TODO: Add model validation
+        },
+        
+        update: function(item, callback) {
+            var collection = db.collection(MOVIMIENTOS_COLLECTION);
+            
+            collection.update({
+                _id: item._id
+            }, {
+                date: item.date,
+                concept: item.concept,
+                amount: item.amount,
+                type: item.type
+            }, callback);
+        },
+        
+        delete: function(items, callback) {
+            var collection = db.collection(MOVIMIENTOS_COLLECTION);
+            
+            var moves = [];
+            
+            if (!_.isArray(items)) {
+                if (_.isString(items)) {
+                    moves.push(JSON.parse(items));
                 } else {
-                    response.send({done: true});
+                    moves.push(items);
                 }
-            });
-            */
+            } else {
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    if (_.isString(item)) {
+                        moves.push(JSON.parse(item));
+                    } else {
+                        moves.push(item);
+                    }
+                }
+            }
+            
+            var ids = _.pluck(moves, '_id');
+            
+            collection.remove({
+                _id: {
+                    $in: ids
+                }
+            }, callback);
+        },
+        
+        export: function(filter, callback) {
+            // var types = filter.type;
+            
+            // if (typeof types === 'string') {
+            //     types = [types];
+            // }
+            
+            // var queryAll = false;
+            // if (types.indexOf('all') !== -1) {
+            //     queryAll = true;
+            // }
+	        
+            // var query = ' SELECT type, sum(amount) as Total FROM movimientos WHERE 1=1 ';
+            // if (!queryAll) {
+            //     query += ' AND type in ( ';
+                
+            //     for (var i = 0; i < types.length; i++) {
+            //         var _type = types[i];
+                    
+            //         query += '\'' + _type + '\'';
+                    
+            //         if (i < types.length - 1) {
+            //             query += ', ';
+            //         }
+            //     }
+                
+            //     query  += ' ) '
+            // }
+            // query += ' GROUP BY type ORDER BY Total desc; ';
+
+            // var docs = [];
+            // pg.connect(config.getConnectionString(), function(err, client, done) {
+            //     if (err) cb(err);
+
+            //     var res = client.query(query);
+
+            //     res.on('row', function(row) {
+            //         docs.push(row);
+            //     });
+
+            //     res.on('end', function() {
+            //         client.end();
+            //         cb(null, docs);
+            //     });
+            // });
         }
     };
 };
