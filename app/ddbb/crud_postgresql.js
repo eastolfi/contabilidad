@@ -5,7 +5,8 @@ var pg = require('pg'),
 
 module.exports = function(config) {
     return {
-        search: function(filter, cb) {
+        // Movement
+        searchMovement: function(filter, cb) {
             var query = ' SELECT * FROM movimientos WHERE 1=1 ';
             if (filter) {
                 var f = JSON.parse(filter);
@@ -32,14 +33,15 @@ module.exports = function(config) {
                         }
                     }
                     
-                    query  += ' ) '
+                    query  += ' ) ';
                 }
             }
+            
             query += ';';
 
             var docs = [];
             pg.connect(config.getConnectionString(), function(err, client, done) {
-                if (err) cb(err);
+                if (err) return cb(err);
 
                 var res = client.query(query);
 
@@ -53,13 +55,14 @@ module.exports = function(config) {
                 });
             });
         },
-        create: function(item, cb) {
+        
+        createMovement: function(item, cb) {
             var query = ' INSERT INTO movimientos (date, concept, amount, type) VALUES( ';
 
             query += '\'' + item.date + '\', \'' + item.concept + '\', ' + item.amount + ', \'' + item.type + '\' );';
 
             pg.connect(config.getConnectionString(), function(err, client, done) {
-                if (err) cb(err);
+                if (err) return cb(err);
 
                 var res = client.query(query);
 
@@ -69,13 +72,14 @@ module.exports = function(config) {
                 });
             });
         },
-        update: function(item, cb) {
+        
+        updateMovement: function(item, cb) {
             var query = ' UPDATE movimientos SET ';
             query += 'date = \'' + item.date + '\', concept = \'' + item.concept + '\', amount = ' + item.amount + ', type = \'' + item.type + '\'';
             query += ' WHERE 1=1 AND _id = ' + item._id + ';';
 
             pg.connect(config.getConnectionString(), function(err, client, done) {
-                if (err) cb(err);
+                if (err) return cb(err);
 
                 var res = client.query(query);
 
@@ -85,7 +89,8 @@ module.exports = function(config) {
                 });
             });
         },
-        delete: function(items, cb) {
+        
+        deleteMovement: function(items, cb) {
             var moves = [];
 
             if (!_.isArray(items)) {
@@ -115,7 +120,7 @@ module.exports = function(config) {
             _in += ' ) ';
             var query = ' DELETE FROM movimientos WHERE 1=1 AND _id IN ' + _in + ';';
             pg.connect(config.getConnectionString(), function(err, client, done) {
-                if (err) cb(err);
+                if (err) return cb(err);
 
                 var res = client.query(query);
 
@@ -125,6 +130,22 @@ module.exports = function(config) {
                 });
             });
         },
+        
+        // Predefined Movements
+        searchPredefined: function(filter, cb) {
+            // TODO
+        },
+        createPredefined: function(item, cb) {
+            // TODO
+        },
+        updatePredefined: function(item, cb) {
+            // TODO
+        },
+        deletePredefined: function(items, cb) {
+            // TODO
+        },
+        
+        // Exporting
         export: function(filter, cb) {
             // var total = filter.registros;
 	        var types = filter.type;
@@ -152,13 +173,13 @@ module.exports = function(config) {
                     }
                 }
                 
-                query  += ' ) '
+                query  += ' ) ';
             }
             query += ' GROUP BY type ORDER BY Total desc; ';
 
             var docs = [];
             pg.connect(config.getConnectionString(), function(err, client, done) {
-                if (err) cb(err);
+                if (err) return cb(err);
 
                 var res = client.query(query);
 
@@ -173,10 +194,29 @@ module.exports = function(config) {
             });
         },
         
+        exportPDF: function(init, end, cb) {
+            var query = " " +
+                " SELECT MOV.concept AS Concepto, MOV.amount AS Cantidad, MOV.type as Tipo, MOV.date as Fecha, " +
+				" ( " +
+					" SELECT SUM(MOV2.amount) " +
+					" FROM movimientos MOV2 " +
+					" WHERE MOV2.date >= '"+init.format('YYYY-MM-DD')+"' " +
+					" AND MOV2.date <= '"+end.format('YYYY-MM-DD')+"' " +
+					" AND MOV2.type = MOV.type " +
+				" ) as Total " +
+				" FROM movimientos MOV   " +
+				" WHERE MOV.date >= '"+init.format('YYYY-MM-DD')+"' " +
+				" AND MOV.date <= '"+end.format('YYYY-MM-DD')+"' " +
+				" ORDER BY Tipo ASC, Fecha ASC; ";
+				
+			this.execute(query, cb);
+        },
+        
+        // Others
         execute: function(query, cb) {
             var docs = [];
             pg.connect(config.getConnectionString(), function(err, client, done) {
-                if (err) cb(err);
+                if (err) return cb(err);
 
                 var res = client.query(query);
 

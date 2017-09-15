@@ -35,7 +35,11 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 
 // Application Routes
-require(__dirname + '/app/routes.js')(app);
+var dbConfig = require(__dirname + '/app/ddbb/ddbbConfig')();
+var ddbbHandler = require(__dirname + '/app/ddbb/ddbbHandler.js')(dbConfig);
+
+require(__dirname + '/app/routesMovements.js')(app, ddbbHandler);
+require(__dirname + '/app/routesPredefineds.js')(app, ddbbHandler);
 
 // Application Start
 var PORT = process.env.PORT || '3000';

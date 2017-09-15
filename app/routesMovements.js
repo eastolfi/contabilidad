@@ -3,9 +3,7 @@
 /**
  * Module dependencies.
  */
-var dbConfig = require('./ddbb/ddbbConfig')();
-var ddbbHandler = require('./ddbb/ddbbHandler.js')(dbConfig),
-	path = require('path'),
+var path = require('path'),
     _ = require('lodash'),
     fs = require('fs'),
     moment = require('moment'),
@@ -16,19 +14,19 @@ moment.locale('es');
 
 jsreport.renderDefaults.rootDirectory = path.resolve(__dirname + '/../node_modules/jsreport/node_modules');
 
-module.exports = function(app) {
+module.exports = function(app, ddbbHandler) {
 
 	// Home
 	app.get('/', function(request, response) {
 		response.sendFile(path.resolve(__dirname + '/../public/views/index.html'));
 	});
 
-	// Find All
+	// Find All Movements
 	app.get('/movement', function(request, response) {
         // Setup filter
         var filter = request.query.filter;
 
-        ddbbHandler.search(filter, function(err, docs) {
+        ddbbHandler.searchMovement(filter, function(err, docs) {
             if (err) {
                 console.error(err);
                 response.render('error', {status: 500});
@@ -69,9 +67,9 @@ module.exports = function(app) {
 	});
 	*/
 
-	// Create One
+	// Create One Movement
 	app.post('/movement', function(request, response) {
-        ddbbHandler.create(request.body, function(err, doc) {
+        ddbbHandler.createMovement(request.body, function(err, doc) {
             if (err) {
                 return response.send('users/signup', {
                     errors: err.errors,
@@ -83,7 +81,7 @@ module.exports = function(app) {
         });
 	});
 
-	// Find One
+	// Find One Movement
 	app.get('/movement/:id', function(request, response) {
 		/*
 		Monedero.findOne({_id: req.params.monederoId}, function(err, monedero) {
@@ -98,9 +96,9 @@ module.exports = function(app) {
 		*/
 	});
 
-	// Update One
+	// Update One Movement
 	app.put('/movement/:id', function(request, response) {
-		ddbbHandler.update(request.body, function(err, doc) {
+		ddbbHandler.updateMovement(request.body, function(err, doc) {
             if (err) {
                 return response.send('users/signup', {
                     errors: err.errors,
@@ -112,9 +110,9 @@ module.exports = function(app) {
         });
 	});
 
-	// Delete Several
+	// Delete Several Movement
 	app.delete('/movement', function(request, response) {
-        ddbbHandler.delete(request.query.moves, function(err, docs) {
+        ddbbHandler.deleteMovement(request.query.moves, function(err, docs) {
             if (err) {
                 return response.send('users/signup', {
                     errors: err.errors,
@@ -140,11 +138,26 @@ module.exports = function(app) {
 	});
 
 	app.get('/pdfExport/:month/:year', function(request, response) {
-		var month = request.params.month - 1;
+		var month = request.params.month;
 		var year = request.params.year;
+		
+		var initMonth = month,
+			initYear = year,
+			endMonth = month,
+			endYear = year;
+			
+		if (month.indexOf('-') !== -1) {
+			initMonth = month.split('-')[0];
+			endMonth = month.split('-')[1];
+		}
+		
+		if (year.indexOf('-') !== -1) {
+			initYear = year.split('-')[0];
+			endYear = year.split('-')[1];
+		}
 
-		var init = moment().month(month).startOf('month');
-		var end = moment().month(month).endOf('month');
+		var init = moment().month(initMonth).year(initYear).startOf('month');
+		var end = moment().month(endMonth).year(endYear).endOf('month');
 
 		var tmplData = {
 			reportMonth: init.format('MMMM')
@@ -156,47 +169,33 @@ module.exports = function(app) {
 
 			var tmpl = JSON.parse(data);
 
-			var query = " SELECT MOV.concept AS Concepto, MOV.amount AS Cantidad, MOV.type as Tipo, MOV.date as Fecha, " +
-						" ( " +
-							" SELECT SUM(MOV2.amount) " +
-							" FROM movimientos MOV2 " +
-							" WHERE MOV2.date >= '"+init.format('YYYY-MM-DD')+"' " +
-							" AND MOV2.date <= '"+end.format('YYYY-MM-DD')+"' " +
-							" AND MOV2.type = MOV.type " +
-						" ) as Total " +
-						" FROM movimientos MOV   " +
-						" WHERE MOV.date >= '"+init.format('YYYY-MM-DD')+"' " +
-						" AND MOV.date <= '"+end.format('YYYY-MM-DD')+"' " +
-						" ORDER BY Tipo ASC, Fecha ASC; ";
-
-			ddbbHandler.execute(query, function(err, docs) {
+			ddbbHandler.exportPDF(init, end, function(err, docs) {
 				if (err) throw err;
 
 				var movimientos = [];
-				var insertedGroupes = [];
-				var cont = -1;
+				var insertedGroupes = {};
 				var nElements = 0;
 				for (var i = 0; i < docs.length; i++) {
 					var doc = docs[i];
 
-					if (insertedGroupes.indexOf(doc.tipo) === -1) {
-						cont++;
-
+					if (_.isNil(insertedGroupes[doc.tipo])) {
 						if (nElements >= 10) {
-							movimientos[cont-1].newPage = true;
+							movimientos[insertedGroupes[doc.tipo] - 1].newPage = true;
 							nElements = 0;
 						}
+						
+						insertedGroupes[doc.tipo] = movimientos.length;
 
-						movimientos[cont] = {
+						movimientos.push({
 							tipo: doc.tipo,
-							total: doc.total,
+							total: 0,
 							newPage: false,
 							movimientos: []
-						};
-						insertedGroupes.push(doc.tipo);
+						});
 					}
 
-					movimientos[cont].movimientos.push({
+					movimientos[insertedGroupes[doc.tipo]].total += doc.cantidad;
+					movimientos[insertedGroupes[doc.tipo]].movimientos.push({
 						concepto: doc.concepto,
 						cantidad: doc.cantidad,
 						fecha: moment(doc.fecha).format('DD/MM/YYYY')

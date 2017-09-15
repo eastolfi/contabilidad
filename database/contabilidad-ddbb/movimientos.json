@@ -1,1 +1,10 @@
 {"date":"2016-06-09T06:30:43.488Z","type":"Otros","concept":"Vuelo Irene","amount":89,"_id":"575a5eb08715de0e1a000002","timestamp":1465540272}
+{"date":"2016-06-01T18:07:50.828Z","type":"Casa / Fijos","concept":"Alquiler Junio","amount":950,"_id":"5760481c112d237f4d000002","timestamp":1465927708}
+{"date":"2016-06-22T20:09:31.333Z","type":"Casa / Fijos","concept":"Luz Junio","amount":45,"_id":"576064a5e65e7f2256000002","timestamp":1465935013}
+{"date":"2016-06-08T20:11:11.027Z","type":"Otros","concept":"Estantería","amount":99,"_id":"576064fae65e7f2256000004","timestamp":1465935098}
+{"date":"2016-06-22T20:39:11.768Z","type":"Casa / Fijos","concept":"Internet","amount":28,"_id":"57606b93992dd5875a000002","timestamp":1465936787}
+{"date":"2016-06-01T13:19:49.996Z","type":"Casa / Fijos","concept":"Navigo Junio","amount":105,"_id":"5762a54f41859eda0e000002","timestamp":1466082639}
+{"date":"2017-09-11T11:19:52.556Z","type":"Comida Trabajo","concept":"Bocata","amount":7,"_id":"59b91479d81df75809000002","timestamp":1505301625}
+{"date":"2017-09-12T11:20:27.272Z","type":"Comida Trabajo","concept":"Japones","amount":15,"_id":"59b9148dd81df75809000004","timestamp":1505301645}
+{"date":"2017-09-13T11:20:46.880Z","type":"Comida Trabajo","concept":"Bocata","amount":9,"_id":"59b9149dd81df75809000006","timestamp":1505301661}
+{"date":"2017-09-14T08:25:41.083Z","type":"Comida Trabajo","concept":"Bocata","amount":5.6,"_id":"59bb8eea20deba6809000002","timestamp":1505464042}
