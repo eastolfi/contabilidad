@@ -19,7 +19,7 @@
     "handlebars": "^4.0.5",
     "html-entities": "^1.2.0",
     "jsreport": "^0.10.0",
-    "lodash": "2.4.1",
+    "lodash": "4.13.1",
     "method-override": "2.3.5",
     "moment": "^2.10.6",
     "mongo-portable": "^1.1.5",

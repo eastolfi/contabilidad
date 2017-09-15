@@ -14,19 +14,20 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "2.1.4",
     "angular": "1.4.5",
     "angular-animate": "1.4.5",
     "angular-aria": "1.4.5",
-    "angular-resource": "1.4.5",
-    "angular-messages": "1.4.5",
-    "font-awesome": "4.4.0",
     "angular-material": "0.10.1",
     "angular-material-data-table": "0.8.11",
+    "angular-messages": "1.4.5",
+    "angular-resource": "1.4.5",
+    "font-awesome": "4.4.0",
+    "font-roboto": "PolymerElements/font-roboto#1.0.1",
+    "iron-icons": "PolymerElements/iron-icons#1.0.0",
+    "jquery": "2.1.4",
+    "lodash": "~4.13.1",
     "mdPickers": "0.3.2",
     "moment": "2.10.6",
-    "polymer": "Polymer/polymer#^1.1.0",
-    "iron-icons": "PolymerElements/iron-icons#1.0.0",
-    "font-roboto": "PolymerElements/font-roboto#1.0.1"
+    "polymer": "Polymer/polymer#^1.1.0"
   }
 }
