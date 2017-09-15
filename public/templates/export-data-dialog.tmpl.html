@@ -37,7 +37,7 @@
 				<md-icon><i class="material-icons md-dark">today</i></md-icon>
 				<md-select ng-model="export.month" class="type-select" required>
 					<md-option value="all">Todos</md-option>
-					<md-option ng-repeat="item in months" value="{{$index+1}}">{{item}}</md-option>
+					<md-option ng-repeat="item in months" value="{{$index}}">{{item}}</md-option>
 				</md-select>
 			</md-input-container>
 			
