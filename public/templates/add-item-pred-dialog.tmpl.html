@@ -12,18 +12,6 @@
 		</md-toolbar>
 		
 		<md-dialog-content><!--style="max-width:800px;max-height:810px; "-->
-			<md-input-container class="md-icon-float" flex="100" ng-init="predefined='-1'">
-				<label>Predefinidos</label>
-				<md-icon><i class="material-icons md-dark">restore</i></md-icon>
-				<md-select tabindex="4" ng-model="predefined" class="type-select">
-					<md-option value="-1">Predefinidos...</md-option>
-					<md-option ng-repeat="pred in predefinedMoves" value="{{$index}}">
-						<span>{{pred.concept}}</span>
-						<span ng-if="pred.amount">&nbsp;({{pred.amount}}€)</span>
-					</md-option>
-				</md-select>
-			</md-input-container>
-			
 			<md-input-container class="md-icon-float">
 				<label>Concepto</label>
 				<md-icon><i class="material-icons md-dark">insert_comment</i></md-icon>
@@ -36,12 +24,14 @@
 			</md-input-container>
 			
 			<md-input-container class="md-icon-float">
-				<label>Fecha</label>
+				<label>Día de Inserción</label>
 				<md-icon><i class="material-icons md-dark">event_note</i></md-icon>
-				<input tabindex="2" type="text" ng-model="localDate" name="date" required ng-click="showPicker($event)" readonly>
+				<input tabindex="3" type="number" ng-model="move.day" name="day" required min="1" max="31">
 				
 				<div ng-messages="addForm.date.$error">
 					<div ng-message="required">Introduce una fecha por favor.</div>
+					<div ng-message="min">El día no puede ser inferior a 1.</div>
+					<div ng-message="max">El día no puede ser superior a 31.</div>
 				</div>
 			</md-input-container>				
 			
